@@ -49,7 +49,7 @@ class LendingOpenPositionsFetcherTest extends TestCase
     {
         $token = $this->job->getDownloadToken($this->previousDate);
 
-        $customHeaders = ['date', 'symbol', 'isin', 'asset', 'balance_amount', 'average_price', 'price_factor', 'total_balence'];
+        $customHeaders = ['date', 'ticker_symbol', 'isin', 'ticker_symbol_abrv', 'balance_amount', 'average_price', 'price_factor', 'total_balence'];
 
         $data = $this->job->getData($token, $customHeaders);
 
