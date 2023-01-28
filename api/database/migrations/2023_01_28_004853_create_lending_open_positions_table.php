@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('ticker_symbol_id')->constrained();
             $table->integer('balance_amount');
             $table->float('average_price', 10, 6);
-            $table->float('total_balence', 13, 2);
+            $table->float('total_balance', 13, 2);
         });
     }
 
