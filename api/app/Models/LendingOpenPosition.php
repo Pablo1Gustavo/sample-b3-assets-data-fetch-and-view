@@ -1,6 +1,7 @@
 <?php
 namespace App\Models;
 
+use App\Http\Requests\LendingOpenPositionFilterRequest;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -26,5 +27,20 @@ class LendingOpenPosition extends Model
     public function ticker_symbol(): BelongsTo
     {
         return $this->belongsTo(TickerSymbol::class);
+    }
+
+    public function scopeAsset($query, int $id): Builder
+    {
+        return $query->where('ticker_symbol_id', $id);
+    }
+
+    public function scopeStartDate($query, string $startDate)
+    {
+        return $query->where('date', '>=', $startDate);
+    }
+
+    public function scopeEndDate($query, string $endDate)
+    {
+        return $query->where('date', '<=', $endDate);
     }
 }
