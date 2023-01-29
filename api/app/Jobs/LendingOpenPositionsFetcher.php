@@ -7,23 +7,54 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Http;
+use App\Models\TickerSymbol;
+use App\Models\LendingOpenPosition;
 
 class LendingOpenPositionsFetcher implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     private string $apiUrl = 'https://arquivos.b3.com.br/api';
+    private string $date;
 
-    public function getFetchUrl(string $date): string
+    private array $customHeaders = [
+        'date',
+        'ticker_symbol',
+        'isin',
+        'ticker_symbol_abrv',
+        'balance_amount',
+        'average_price',
+        'price_factor',
+        'total_balance'
+    ];
+
+    public function __construct(string $date)
     {
-        return $this->apiUrl.'/download/requestname?fileName=LendingOpenPosition&date='.$date;
+        $this->date = $date;
     }
 
-    public function getDownloadToken(string $date): string
+    public function getDate()
     {
-        $response = Http::get($this->getFetchUrl($date));
+        return $this->date;
+    }
+
+    public function setDate(string $date)
+    {
+        $this->date = $date;
+    }
+
+    public function getFetchUrl(): string
+    {
+        return $this->apiUrl.'/download/requestname?fileName=LendingOpenPosition&date='.$this->date;
+    }
+
+    public function getDownloadToken(): string | null
+    {
+        $response = Http::get($this->getFetchUrl());
 
         $data = json_decode($response->body(), true);
+
+        if ($response->getStatusCode() != 200) return null;
 
         return $data['token'];
     }
@@ -54,8 +85,55 @@ class LendingOpenPositionsFetcher implements ShouldQueue
         return $data;
     }
 
-    public function handle()
+    private function addUnexistingTickerSymbols(array $data): void
     {
-        //
+        $tickerSymbols = collect($data)->map(
+            fn ($item) => $item[$this->customHeaders[1]]
+        );
+
+        $existingTickerSymbols = TickerSymbol::all()->pluck('id','name');
+
+        $missingTickerSymbols = $tickerSymbols->filter(
+            fn ($item) => !$existingTickerSymbols->has($item)
+        )->map(
+            fn($name) => ['name' => $name]
+        );
+        
+        TickerSymbol::insert($missingTickerSymbols->toArray());
+    }
+
+    // Requires add unexisting ticker symbols before
+    private function addLendingOpenPositions(array $data): void
+    {
+        $lendingOpenPositions = [];
+
+        $existingTickerSymbols = TickerSymbol::all()->pluck('id','name');
+
+        forEach ($data as $item)
+        {
+            $lendingOpenPositions[] = [
+                'date'              => $item['date'],
+                'ticker_symbol_id'  => $existingTickerSymbols[$item['ticker_symbol']],
+                'balance_amount'    => $item['balance_amount'],
+                'average_price'     => str_replace(",", ".", $item['average_price']),
+                'total_balance'     => str_replace(",", ".", $item['total_balance'])
+            ];
+        }
+
+        LendingOpenPosition::insert($lendingOpenPositions);
+    }
+
+    public function handle(): void
+    {
+        if (LendingOpenPosition::dateExists($this->date)) return;
+
+        $token = $this->getDownloadToken();
+
+        if (is_null($token)) return;
+        
+        $data = $this->getData($token, $this->customHeaders);
+
+        $this->addUnexistingTickerSymbols($data);
+        $this->addLendingOpenPositions($data);
     }
 }
