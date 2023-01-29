@@ -5,10 +5,10 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class TickerSymbolFactory extends Factory
 {
-    public function definition()
+    public function definition(): array
     {
         return [
-            'ticker_symbol' => fake()->regexify('[A-Z]{4}[0-9]{2}')
+            'name' => fake()->regexify('[A-Z]{4}[0-9]{2}')
         ];
     }
 }

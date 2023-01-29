@@ -12,7 +12,7 @@ return new class extends Migration
         Schema::create('ticker_symbols', function (Blueprint $table)
         {
             $table->id();
-            $table->string('ticker_symbol', 6)->unique();
+            $table->string('name', 6)->unique();
         });
     }
 
