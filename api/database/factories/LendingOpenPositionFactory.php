@@ -5,7 +5,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class LendingOpenPositionFactory extends Factory
 {
-    public function definition()
+    public function definition(): array
     {
         return [
             'isin' => fake()->regexify('[A-Z]{9}[0-9]{3}'),
