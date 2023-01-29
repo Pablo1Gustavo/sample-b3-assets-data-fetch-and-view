@@ -11,7 +11,6 @@ return new class extends Migration
         Schema::create('lending_open_positions', function (Blueprint $table)
         {
             $table->id();
-            $table->char('isin', 12)->unique();
             $table->date('date');
             $table->foreignId('ticker_symbol_id')->constrained();
             $table->integer('balance_amount');
