@@ -15,6 +15,15 @@ class LendingOpenPosition extends Model
 
     protected $hidden = ['id'];
 
+    protected $fillable = [
+        'isin',
+        'date',
+        'ticker_symbol_id',
+        'balance_amount',
+        'average_price',
+        'total_balance'
+    ];
+
     protected static function boot()
     {
         parent::boot();

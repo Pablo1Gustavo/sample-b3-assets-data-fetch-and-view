@@ -11,6 +11,8 @@ class TickerSymbol extends Model
 
     public $timestamps = false;
 
+    protected $fillable = ['name'];
+
     public function lending_open_positions(): HasMany
     {
         return $this->hasMany(LendingOpenPosition::class);
