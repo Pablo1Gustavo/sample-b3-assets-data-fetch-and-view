@@ -52,4 +52,9 @@ class LendingOpenPosition extends Model
     {
         return $query->where('date', '<=', $endDate);
     }
+
+    public function scopeDateExists($query, string $date)
+    {
+        return $query->where('date', $date)->exists();
+    }
 }
