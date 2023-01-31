@@ -9,6 +9,7 @@
         <v-row>
             <v-col cols="12">
                 <date-line-chart
+                    :title="`Lending open postions for the ${asset.name}`"
                     :line-colors="['#06C889','#DE9D1E']"
                     :fetcher="lendingOpenPositionsFetcher"
                 />

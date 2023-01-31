@@ -1,7 +1,5 @@
 <template>
-    <panel-card
-        title="Lending open postions"
-    >
+    <panel-card :title="title">
         <chart
             v-if="showChart"
             type="line"
