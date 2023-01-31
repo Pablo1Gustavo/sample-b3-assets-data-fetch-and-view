@@ -20,11 +20,16 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 
+type Asset = {
+    id: number;
+    name: string;
+}
+
 export default defineComponent({
     name: "Home",
 
     data: () => ({
-        asset: null
+        asset: {} as Asset
     }),
 
     computed: {
@@ -34,7 +39,7 @@ export default defineComponent({
                 url: 'lendingopenposition',
                 params: [{
                     key: "asset",
-                    value: this.asset,
+                    value: this.asset.id,
                     required: true
                 }],
                 categoriesKey: 'date',

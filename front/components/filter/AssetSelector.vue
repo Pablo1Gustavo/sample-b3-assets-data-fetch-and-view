@@ -2,12 +2,12 @@
     <v-autocomplete
         outlined
         hide-details
+        return-object
         background-color="sgrey"
         label="Asset"
         :items='assets'
         v-model='asset'
         item-text="name"
-        item-value="id"
         @change="$emit('input', asset)"
     />
 </template>
