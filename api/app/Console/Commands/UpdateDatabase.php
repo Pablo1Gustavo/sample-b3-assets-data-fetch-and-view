@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
@@ -12,23 +11,18 @@ class UpdateDatabase extends Command
 
     public function handle()
     {
-        $daysInterval = intval($this->argument('days'));
+        $daysInterval = intval($this->argument('days')) + 1;
 
-        $bar = $this->output->createProgressBar($daysInterval + 1);
-
-        $bar->start();
-
-        $job = new \App\Jobs\LendingOpenPositionsFetcher('');
+        $this->info('Queueing fetcher jobs for '.$daysInterval.' days...');
 
         for ($day = 0; $day <= $daysInterval; $day++)
         {
-            $job->setDate(date('Y-m-d', strtotime("-".$day." days")));
-            $job->handle();
+            $date = date('Y-m-d', strtotime("-".$day." days"));
 
-            $bar->advance();
+            dispatch(new \App\Jobs\LendingOpenPositionsFetcher($date));
         }
 
-        $bar->finish();
+        $this->info('Fetcher jobs queued successfully.');
 
         return Command::SUCCESS;
     }
