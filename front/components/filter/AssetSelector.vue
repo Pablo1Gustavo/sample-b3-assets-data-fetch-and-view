@@ -1,7 +1,8 @@
 <template>
-    <v-select
+    <v-autocomplete
         outlined
         hide-details
+        background-color="sgrey"
         label="Asset"
         :items='assets'
         v-model='asset'
@@ -19,11 +20,14 @@ export default defineComponent({
 
     data: () => ({
         asset: null,
-        assets: [
-            { id: 1, name: "ABCD01" },
-            { id: 2, name: "ABCD02" },
-            { id: 3, name: "ABCD03" }
-        ]
-    })
+        assets: []
+    }),
+
+    mounted()
+    {
+        this.$axios.get('tickersymbol').then(res => {
+            this.assets = res.data;
+        })
+    }
 })
 </script>
