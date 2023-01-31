@@ -3,9 +3,14 @@
         <v-app-bar
             app
             dark
-            color="system-blue-darken"
+            color="sblue-darken-2"
         >
-            <v-toolbar-title> B3 Sample Data Fetch and View </v-toolbar-title>
+            <v-toolbar-title>
+                <v-icon large class="ml-5 mr-2">
+                    mdi-elephant
+                </v-icon>
+                B3 Sample Data Fetch and View
+            </v-toolbar-title>
         </v-app-bar>
 
         <v-main>
