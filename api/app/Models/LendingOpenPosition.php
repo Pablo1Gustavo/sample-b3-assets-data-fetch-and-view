@@ -31,6 +31,10 @@ class LendingOpenPosition extends Model
         static::addGlobalScope('ticker_symbol', function (Builder $builder) {
             $builder->with('ticker_symbol');
         });
+
+        static::addGlobalScope('order', function (Builder $builder) {
+            $builder->orderBy('date');
+        });
     }
 
     public function ticker_symbol(): BelongsTo
