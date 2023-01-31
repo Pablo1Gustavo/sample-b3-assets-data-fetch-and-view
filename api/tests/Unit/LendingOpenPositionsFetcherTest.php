@@ -12,14 +12,13 @@ class LendingOpenPositionsFetcherTest extends TestCase
     {
         parent::setUp();
 
-        $previousDate = date('Y-m-d',strtotime("-3 days"));
-        $this->job = new LendingOpenPositionsFetcher($previousDate);
+        $this->job = new LendingOpenPositionsFetcher(date('Y-m-d'));
     }
 
     function test_get_fetch_url()
     {
-        $previousDate = date('Y-m-d',strtotime("-3 days"));
-        $expectedUrl = 'https://arquivos.b3.com.br/api/download/requestname?fileName=LendingOpenPosition&date='.$previousDate;
+        $currDate = date('Y-m-d');
+        $expectedUrl = 'https://arquivos.b3.com.br/api/download/requestname?fileName=LendingOpenPosition&date='.$currDate;
 
         $url = $this->job->getFetchUrl();
 
@@ -28,7 +27,7 @@ class LendingOpenPositionsFetcherTest extends TestCase
 
     function test_get_download_token()
     {
-        $token = $this->job->getDownloadToken();
+        $token = $this->job->getLastAvaliableToken();
 
         $this->assertTrue(base64_decode($token, true) !== false);
     }
@@ -52,7 +51,7 @@ class LendingOpenPositionsFetcherTest extends TestCase
 
     function test_get_data()
     {
-        $token = $this->job->getDownloadToken();
+        $token = $this->job->getLastAvaliableToken();
 
         $data = $this->job->getData($token);
 
@@ -63,7 +62,7 @@ class LendingOpenPositionsFetcherTest extends TestCase
 
     function test_get_data_with_custom_headers()
     {
-        $token = $this->job->getDownloadToken();
+        $token = $this->job->getLastAvaliableToken();
 
         $customHeaders = ['date', 'ticker_symbol', 'isin', 'ticker_symbol_abrv', 'balance_amount', 'average_price', 'price_factor', 'total_balance'];
 
