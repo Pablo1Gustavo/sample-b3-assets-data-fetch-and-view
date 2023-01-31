@@ -1,3 +1,7 @@
+html {
+    overflow-y: auto !important;
+}
+
 * {
     font-family: "PT Sans", sans-serif !important;
 }
