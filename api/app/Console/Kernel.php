@@ -8,7 +8,9 @@ class Kernel extends ConsoleKernel
 {
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('update:database')->dailyAt('23:50');
+        $schedule->command('update:database')
+            ->weekdays()
+            ->dailyAt('23:50');
     }
 
     protected function commands()

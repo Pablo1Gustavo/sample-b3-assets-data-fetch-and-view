@@ -138,6 +138,10 @@ class LendingOpenPositionsFetcher implements ShouldQueue
 
     public function handle(): void
     {
+        $weekDayCode = date('N', strtotime($this->date));
+
+        if (in_array($weekDayCode, [6,7])) return;
+
         if (LendingOpenPosition::dateExists($this->date)) return;
 
         $token = $this->getDownloadToken();
