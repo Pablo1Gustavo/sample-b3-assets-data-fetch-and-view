@@ -37,7 +37,6 @@ class LendingOpenPositionsFetcher implements ShouldQueue
     {
         return $this->date;
     }
-
     public function setDate(string $date)
     {
         $this->date = $date;
@@ -52,11 +51,25 @@ class LendingOpenPositionsFetcher implements ShouldQueue
     {
         $response = Http::get($this->getFetchUrl());
 
-        $data = json_decode($response->body(), true);
-
         if ($response->getStatusCode() != 200) return null;
 
+        $data = json_decode($response->body(), true);
+
         return $data['token'];
+    }
+
+    public function getLastAvaliableToken(int $daysInterval = 30): string | null
+    {
+        for ($day = 0; $day <= $daysInterval; $day++)
+        {
+            $this->setDate(date('Y-m-d', strtotime("-".$day." days")));
+            
+            $token = $this->getDownloadToken();
+
+            if ($token != null) return $token;
+        }
+
+        return null;
     }
 
     public function getData(string $token, array $customHeaders = null): array
