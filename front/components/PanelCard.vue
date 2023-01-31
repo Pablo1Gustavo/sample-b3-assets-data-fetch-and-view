@@ -1,6 +1,7 @@
 <template>
     <v-card
         dark
+        color="sgrey"
         :height="height"
         :rounded="flat ? '0' : 'md'"
         :elevation="flat ? 0 : 3"

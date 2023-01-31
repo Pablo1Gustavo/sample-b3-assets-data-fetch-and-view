@@ -50,7 +50,7 @@ export default {
                 dark: {
                     "sblue-darken": "#1F2937",
                     "sblue-darken-2": "#1D2632",
-                    "sblack": "#1F2937"
+                    "sgrey": "#202230"
                 }
             }
         }

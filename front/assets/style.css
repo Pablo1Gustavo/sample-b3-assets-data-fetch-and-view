@@ -1,3 +1,7 @@
 * {
     font-family: "PT Sans", sans-serif !important;
 }
+
+.theme--dark.v-application {
+    background: #1F2937 !important;
+}
