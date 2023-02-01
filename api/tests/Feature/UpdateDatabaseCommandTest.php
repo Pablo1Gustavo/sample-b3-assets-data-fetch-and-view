@@ -1,20 +1,18 @@
 <?php
-
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Artisan;
 use Tests\TestCase;
 
 class UpdateDatabaseCommandTest extends TestCase
 {
-    use RefreshDatabase;
-
-    public function test_update_database_command()
+    public function test_dispatch_a_job_to_the_queue()
     {
-        Artisan::call("update:database 3");
+        Queue::fake();
 
-        $this->assertDatabaseHas('ticker_symbols', ['id' => 1]);
-        $this->assertDatabaseHas('lending_open_positions', ['id' => 1]);
+        Artisan::call('update:database 30');
+
+        Queue::assertPushed(\App\Jobs\LendingOpenPositionsFetcher::class, 31);
     }
 }
