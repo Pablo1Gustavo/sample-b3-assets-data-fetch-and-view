@@ -16,7 +16,6 @@ class LendingOpenPosition extends Model
     protected $hidden = ['id'];
 
     protected $fillable = [
-        'isin',
         'date',
         'ticker_symbol_id',
         'balance_amount',
@@ -27,10 +26,6 @@ class LendingOpenPosition extends Model
     protected static function boot()
     {
         parent::boot();
-
-        static::addGlobalScope('ticker_symbol', function (Builder $builder) {
-            $builder->with('ticker_symbol');
-        });
 
         static::addGlobalScope('order', function (Builder $builder) {
             $builder->orderBy('date');
