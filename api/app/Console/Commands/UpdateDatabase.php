@@ -11,13 +11,13 @@ class UpdateDatabase extends Command
 
     public function handle()
     {
-        $daysInterval = intval($this->argument('days')) + 1;
+        $daysInterval = intval($this->argument('days'));
 
-        $this->info('Queueing fetcher jobs for '.$daysInterval.' days...');
+        $this->info('Queueing fetcher jobs for '.($daysInterval + 1).' days...');
 
         for ($day = 0; $day <= $daysInterval; $day++)
         {
-            $date = date('Y-m-d', strtotime("-".$day." days"));
+            $date = date('Y-m-d', strtotime("-$day days"));
 
             dispatch(new \App\Jobs\LendingOpenPositionsFetcher($date));
         }
