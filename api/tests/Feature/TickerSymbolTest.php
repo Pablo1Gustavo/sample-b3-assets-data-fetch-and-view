@@ -9,7 +9,7 @@ class TickerSymbolTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function test_get_ticker_symbols()
+    function test_get_ticker_symbols()
     {
         $response = $this->get('/api/tickersymbol');
 
@@ -19,7 +19,7 @@ class TickerSymbolTest extends TestCase
         ]);
     }
 
-    public function test_get_one_ticker_symbol()
+    function test_get_one_ticker_symbol()
     {
         $tickerSymbol = TickerSymbol::factory()->create();
 
@@ -31,7 +31,7 @@ class TickerSymbolTest extends TestCase
         $response->assertJsonStructure(['id', 'name']);
     }
 
-    public function test_get_unexisting_ticker_symbol()
+    function test_get_unexisting_ticker_symbol()
     {
         $tickerSymbol = TickerSymbol::factory()->create();
 

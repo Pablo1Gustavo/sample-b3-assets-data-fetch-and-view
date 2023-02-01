@@ -7,7 +7,7 @@ use Tests\TestCase;
 
 class UpdateDatabaseCommandTest extends TestCase
 {
-    public function test_dispatch_a_job_to_the_queue()
+    function test_dispatch_a_job_to_the_queue()
     {
         Queue::fake();
 
