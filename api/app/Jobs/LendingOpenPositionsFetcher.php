@@ -47,8 +47,12 @@ class LendingOpenPositionsFetcher implements ShouldQueue
         return $this->apiUrl.'/download/requestname?fileName=LendingOpenPosition&date='.$this->date;
     }
 
-    public function getDownloadToken(): string | null
+    public function getDownloadToken(): ?string
     {
+        $weekDayCode = date('N', strtotime($this->date));
+
+        if (in_array($weekDayCode, [6,7])) return null;
+
         $response = Http::get($this->getFetchUrl());
 
         if ($response->getStatusCode() != 200) return null;
@@ -58,7 +62,7 @@ class LendingOpenPositionsFetcher implements ShouldQueue
         return $data['token'];
     }
 
-    public function getLastAvaliableToken(int $daysInterval = 30): string | null
+    public function getLastAvaliableToken(int $daysInterval = 30): ?string
     {
         for ($day = 0; $day <= $daysInterval; $day++)
         {
@@ -138,10 +142,6 @@ class LendingOpenPositionsFetcher implements ShouldQueue
 
     public function handle(): void
     {
-        $weekDayCode = date('N', strtotime($this->date));
-
-        if (in_array($weekDayCode, [6,7])) return;
-
         if (LendingOpenPosition::dateExists($this->date)) return;
 
         $token = $this->getDownloadToken();
