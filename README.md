@@ -17,6 +17,8 @@ To use and test it you can follow the steps explained inside "front" and "api" f
 Laravel:
 * Jobs
 * Commands
+* Queues
+* Error handling
 * Unit tests
 * Factories
 * Model relationships
